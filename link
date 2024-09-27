@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Shortener</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    input, button { margin: 5px; padding: 10px; }
+    #result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Simple Link Shortener</h1>
+  <input type="text" id="urlInput" placeholder="Enter URL to shorten" size="50">
+  <button onclick="shortenUrl()">Shorten URL</button>
+
+  <div id="result"></div>
+
+  <script>
+    function shortenUrl() {
+      const url = document.getElementById('urlInput').value;
+      const encodedUrl = btoa(url); // base64 encode
+
+      const shortUrl = `${window.location.href}?url=${encodedUrl}`;
+      document.getElementById('result').innerHTML = 
+        `<p>Shortened URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a></p>`;
+    }
+
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const urlParam = params.get('url');
+      if (urlParam) {
+        const decodedUrl = atob(urlParam); // base64 decode
+        window.location.href = decodedUrl;
+      }
+    };
+  </script>
+</body>
+</html>

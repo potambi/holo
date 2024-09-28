@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Simple URL Shortener</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <input id="urlInput" class="form-control" type="text" placeholder="Enter URL to shorten">
+                <input id="slugInput" class="form-control mt-2" type="text" placeholder="Custom slug (optional)">
+                <button class="btn btn-primary w-100 mt-3" onclick="shortenUrl()">Shorten URL</button>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <p id="shortenedUrl" class="text-center"></p>
+            </div>
+        </div>
+        
+        </div>
+    </div>
 
+    <script src="script.js"></script>
+</body>
+</html>

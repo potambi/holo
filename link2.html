@@ -3,37 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Link Shortener</title>
-    <style>        body {
+    <title>Simple URL Shortener</title>
+    <style>
+        body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-        }        input[type="text"] {
-            padding: 5px;
-            font-size: 16px;
-        }        button {
-            padding: 5px 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }        button:hover {
-            background-color: #45a049;
-        }        .shortened-link {
-            font-weight: bold;
-            margin-top: 10px;
-        }    </style>
+            text-align: center;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Custom Link Shortener</h1>
-    <p>Enter a long URL below to get a shortened version:</p>
-    <input type="text" id="longUrl" placeholder="Enter long URL">
-    <button onclick="shortenUrl()">Shorten</button>
-    <div class="shortened-link"></div>
-    <script>        function shortenUrl() {
-            const longUrl = document.getElementById('longUrl').value.trim();
-            const shortenedUrl = `${window.location.origin}/${encodeURI(longUrl)}`;
-            document.querySelector('.shortened-link').textContent = `Shortened URL: ${shortenedUrl}`;
-        }    </script>
+    <h1>Simple URL Shortener</h1>
+    <input id="urlInput" type="text" placeholder="Enter URL to shorten">
+    <input id="slugInput" type="text" placeholder="Custom slug (optional)">
+    <button onclick="shortenUrl()">Shorten URL</button>
+
+    <p id="shortenedUrl"></p>
+
+    <h3>Admin Panel (Password Protected)</h3>
+    <input id="password" type="password" placeholder="Enter admin password">
+    <button onclick="login()">Login</button>
+    <div id="adminPanel" style="display:none;">
+        <h2>Analytics</h2>
+        <ul id="analytics"></ul>
+    </div>
+
+    <script>
+        const urlStorage = {};
+
+        function shortenUrl() {
+            const url = document.getElementById('urlInput').value;
+            const slug = document.getElementById('slugInput').value || Math.random().toString(36).substring(7);
+            urlStorage[slug] = { url: url, count: 0 };
+            localStorage.setItem('urlStorage', JSON.stringify(urlStorage));
+            document.getElementById('shortenedUrl').innerHTML = `Shortened URL: <a href="?r=${slug}">${window.location.origin}?r=${slug}</a>`;
+        }
+
+        function redirectToUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('r');
+            const storedUrls = JSON.parse(localStorage.getItem('urlStorage'));
+
+            if (slug && storedUrls && storedUrls[slug]) {
+                storedUrls[slug].count += 1;
+                localStorage.setItem('urlStorage', JSON.stringify(storedUrls));
+                window.location.href = storedUrls[slug].url;
+            }
+        }
+
+        function login() {
+            const password = document.getElementById('password').value;
+            if (password === 'admin123') {
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAnalytics();
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
+        function loadAnalytics() {
+            const storedUrls = JSON.parse(localStorage.getItem('urlStorage'));
+            const analyticsList = document.getElementById('analytics');
+            analyticsList.innerHTML = '';
+
+            for (const slug in storedUrls) {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Slug: ${slug}, URL: ${storedUrls[slug].url}, Clicks: ${storedUrls[slug].count}`;
+                analyticsList.appendChild(listItem);
+            }
+        }
+
+        window.onload = redirectToUrl;
+    </script>
 </body>
 </html>

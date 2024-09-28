@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Link Shortener</title>
+    <style>        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }        input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+        }        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }        button:hover {
+            background-color: #45a049;
+        }        .shortened-link {
+            font-weight: bold;
+            margin-top: 10px;
+        }    </style>
+</head>
+<body>
+    <h1>Custom Link Shortener</h1>
+    <p>Enter a long URL below to get a shortened version:</p>
+    <input type="text" id="longUrl" placeholder="Enter long URL">
+    <button onclick="shortenUrl()">Shorten</button>
+    <div class="shortened-link"></div>
+    <script>        function shortenUrl() {
+            const longUrl = document.getElementById('longUrl').value.trim();
+            const shortenedUrl = `${window.location.origin}/${encodeURI(longUrl)}`;
+            document.querySelector('.shortened-link').textContent = `Shortened URL: ${shortenedUrl}`;
+        }    </script>
+</body>
+</html>
